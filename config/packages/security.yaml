@@ -1,0 +1,27 @@
+security:
+    firewalls:
+        api:
+            pattern: ^/api/v1
+            security: true
+            http_basic: ~
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    admin:
+                        password: 'admin'
+                        roles: ['ROLE_ADMIN']
+                    user:
+                        password: 'user'
+                        roles: ['ROLE_USER']
+
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser:
+            algorithm: bcrypt
+
+    access_control:
+        - { path: ^/api/v1/users$, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/v1/users/.*, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/v1/users$, roles: ROLE_ADMIN, methods: [POST, PATCH, DELETE] }
+        - { path: ^/api/v1/users/.*, roles: ROLE_ADMIN, methods: [POST, PATCH, DELETE] }
